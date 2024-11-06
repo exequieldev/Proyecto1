@@ -1,0 +1,3 @@
+marcador;50
+1234;Marcador;50
+555;Marcador;5
