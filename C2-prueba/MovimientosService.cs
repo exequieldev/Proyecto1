@@ -20,6 +20,7 @@ namespace C2_prueba
             string fileName = Path.Combine(GetAppPath(), "movimientos.txt");
             if (!File.Exists(fileName))
             {
+                
                 // Se crea y escribe el archivo ya que no existe
                 // Se genera un StreamWriter para controlar la escritura de datos
                 using (StreamWriter archivoSalida = new StreamWriter(fileName))
@@ -30,9 +31,11 @@ namespace C2_prueba
             }
             else
             {
+                
                 // Se añaden datos al archivo ya que existe, para eso se establece el segundo parámetro
                 using (StreamWriter archivoSalida = new StreamWriter(fileName, true))
                 {
+                    
                     string datos = $"{unMovimiento.Id};{unMovimiento.Cantidad};{unMovimiento.Fecha};{idProducto}";
                     archivoSalida.WriteLine(datos);
                 }
@@ -43,9 +46,12 @@ namespace C2_prueba
         {
             // Se establece el nombre del archivo a leer
             string fileName = Path.Combine(GetAppPath(), "movimientos.txt");
+           // File.Create(fileName).Dispose();
+
+
             if (File.Exists(fileName))
             {
-                // Se lee el archivo ya que existe
+                // Se lee el archivo ya que existe, busca los movimientos
                 List<Movimiento> movimientos = new List<Movimiento>();
                 string[] lineas = File.ReadAllLines(fileName);
                 foreach (string movimientoComoTexto in lineas)
@@ -61,8 +67,8 @@ namespace C2_prueba
             }
             else
             {
-                // TODO: acá tiene que saltar una excepción
-                return null;
+                
+                throw new Exception("No hay movimietos disponibles");
             }
         }
 

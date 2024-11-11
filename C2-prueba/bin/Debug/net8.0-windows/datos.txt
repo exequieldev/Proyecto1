@@ -1,3 +1,10 @@
-marcador;50
 1234;Marcador;50
 555;Marcador;5
+123;marcador;5
+123;marcador;5
+123;marcador;5
+5;marcador;5
+5;marcador;5
+1256;computadora;100
+1589;Teclado;3
+2;3;5

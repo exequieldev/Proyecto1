@@ -25,7 +25,7 @@ namespace C2_prueba
                 using (StreamWriter archivoSalida = new StreamWriter(fileName))
                 {
                     // Se recorre la colección de cadenas de caracteres y se escribe al archivo
-                    string data = $"{unProducto.ID};{unProducto.Nombre};{unProducto.Cantidad}";
+                    string data = $"{unProducto.ID};{unProducto.Nombre}";
                     archivoSalida.WriteLine(data);
 
 
@@ -36,7 +36,7 @@ namespace C2_prueba
                 // Se añaden datos al archivo ya que existe, para eso se establece el segundo parámetro
                 using (StreamWriter archivoSalida = new StreamWriter(fileName, true))
                 {
-                    string datos = $"{unProducto.ID};{unProducto.Nombre};{unProducto.Cantidad}";
+                    string datos = $"{unProducto.ID};{unProducto.Nombre}";
                     archivoSalida.WriteLine(datos);
                 }
             }
@@ -45,7 +45,7 @@ namespace C2_prueba
         public static List<Producto> LeerProductos()
         {
             // Se establece el nombre del archivo a leer
-            string fileName = Path.Combine(GetAppPath(), "productos.txt");
+            string fileName = Path.Combine(GetAppPath(), "datos.txt");
             if (File.Exists(fileName))
             {
                 // Se lee el archivo ya que existe
@@ -62,15 +62,15 @@ namespace C2_prueba
                 {
                     var datos = productoComoTexto.Split(";");
                     // si se cambia (eliminando) el campo de cantidad se tiene que modificar acá la lectura
-                    Producto unProducto = new Producto(datos[0], datos[1], int.Parse(datos[2]));
+                    Producto unProducto = new Producto(datos[0], datos[1]);
                     productos.Add(unProducto);
                 }
                 return productos;
             }
             else
             {
-                // TODO: Generar una exception con este caso
-                return null;
+                
+                throw new Exception("No hay producto disponible");
             }
         }
     }

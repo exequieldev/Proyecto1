@@ -42,7 +42,12 @@ namespace C2_prueba
             {
                 // Existen productos y está caargada la colección
                 // Se cargan todos los movimientos para cada producto
+                
                 productos = CargarMovimientos(productos);
+                
+                
+                
+                
                 return productos;
             }
             else

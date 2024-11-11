@@ -1,4 +1,6 @@
-﻿namespace C2_prueba
+﻿using System.Windows.Forms;
+
+namespace C2_prueba
 {
     public partial class Form1 : Form
     {
@@ -23,7 +25,7 @@
         {
             // Este metodo carga todos los productos al lisybox de la ui
             this.lstProductos.Items.Clear();
-
+          
 
 
             try
@@ -46,11 +48,16 @@
             //Guardar el producto
             string idProducto = txtID.Text;
             string nombreProducto = txtNombre.Text;
-            int cantidadInicial = int.Parse(numCantidad.Text);
+            
 
-            Producto unProducto = new Producto(idProducto, nombreProducto, cantidadInicial);
+            Producto unProducto = new Producto(idProducto, nombreProducto);
 
             ProductosController.GuadarProducto(unProducto);
+
+            txtID.Text = "";
+            txtNombre.Text = "";
+            
+
             sincronizarListado();
         }
 
@@ -66,26 +73,34 @@
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (this.lstProductos.SelectedIndex != -1) { 
-                
+            string idMovimiento = DateTime.Now.ToString().Replace("/", "").Replace(":", "").Replace(" ", "");
+            if (this.lstProductos.SelectedIndex != -1) {
+               
                 _unProducto = this._ListaProductos[this.lstProductos.SelectedIndex];
                 int cantidadIngresada = (int)this.nupCantidadMovimiento.Value;
-
+                
                 if (this.cbxTipoMovimiento.SelectedIndex == 0) {
-
-                    Movimiento unMovimiento = _unProducto.restarUnidades("123", cantidadIngresada, DateTime.Now);
+                    
+                    Movimiento unMovimiento = _unProducto.agregarUnidades(idMovimiento, cantidadIngresada, DateTime.Now);
                     ProductosController.AgregarMovimiento(_unProducto, unMovimiento);
-
+                    MessageBox.Show("Se agrego un nuevo movimiento");
 
                 }
                 else
                 {
-                    // TODO: reemplazar ID del movimiento por la opci�n de arriba (fecha como string) u otra
-                    // Egreso
+
                     try
                     {
-                        Movimiento unMovimiento = _unProducto.restarUnidades("123", cantidadIngresada, DateTime.Now);
-                        ProductosController.AgregarMovimiento(_unProducto, unMovimiento);
+                        if (_unProducto.StockActual == 0)
+                        {
+                            MessageBox.Show("Este producto no tiene stock actual");
+                        }
+                        else {
+                            Movimiento unMovimiento = _unProducto.restarUnidades(idMovimiento, cantidadIngresada, DateTime.Now);
+                            ProductosController.AgregarMovimiento(_unProducto, unMovimiento);
+                            MessageBox.Show("Se resto un nuevo movimiento");
+                        }
+                        
                     }
                     catch (Exception ex)
                     {
@@ -94,6 +109,8 @@
 
                 }
                 // Se actualiza en el listbox la visualizaci�n
+                nupCantidadMovimiento.Text = "";
+                cbxTipoMovimiento.SelectedIndex = -1;
                 this.sincronizarListado();
             }
             else

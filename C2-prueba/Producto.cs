@@ -10,15 +10,14 @@ namespace C2_prueba
     {
         private string _idProducto;
         private string _nomrbe;
-        private int _cantidad;
         private List<Movimiento> _movimientos = new List<Movimiento>();
 
 
-        public Producto(string idProducto,string nomrbe, int cantidad)
+        public Producto(string idProducto,string nomrbe)
         {
             _idProducto = idProducto;
             _nomrbe = nomrbe;
-            _cantidad = cantidad;
+            
         }
 
         public string Nombre {
@@ -34,18 +33,7 @@ namespace C2_prueba
         }
 
 
-        public int Cantidad {
-
-            get { return _cantidad; }
-            set
-            {
-                if (value > 0)
-                {
-                    _cantidad = value;
-                }
-            }
-
-        }
+        
 
         public string ID
         {
@@ -63,7 +51,20 @@ namespace C2_prueba
 
         public override string ToString()
         {
-            return $"Id:{ID},Nombre: {Nombre},Cantidad: {Cantidad}";
+            return $"Id:{ID},Nombre: {Nombre}, Stock Actual: {this.StockActual}";
+        }
+
+        public int StockActual
+        {
+            get
+            {
+                int stockActual = 0;
+                foreach (var movimiento in this._movimientos)
+                {
+                    stockActual += movimiento.Cantidad;
+                }
+                return stockActual;
+            }
         }
 
         public void CargarMovimientos(List<Movimiento> listaMovimientos)
@@ -71,14 +72,26 @@ namespace C2_prueba
             _movimientos = listaMovimientos;
         }
 
+        // Se definen los métodos para agregar y restar stock
+        public Movimiento agregarUnidades(string idMovimiento, int cantidadUnidades,
+            DateTime fecha)
+        {
+            // Se genera el objeto para registrar el movimiento
+            Movimiento carga = new Movimiento(idMovimiento, cantidadUnidades,
+                fecha);
+            // Se carga el movimiento en la lista del objeto
+            _movimientos.Add(carga);
+            return carga;
+        }
+
         public Movimiento restarUnidades(string idMovimiento, int cantidadUnidades,
             DateTime fecha)
         {
             // Se genera el objeto para registrar el movimiento
-            Movimiento descarga = new Movimiento(idMovimiento, -cantidadUnidades,
-                fecha);
+            Movimiento descarga = new Movimiento(idMovimiento, -cantidadUnidades,fecha);
             // Se carga el movimiento en la lista del objeto
-            _movimientos.Add(descarga);
+            _movimientos.Remove(descarga);
+
             return descarga;
         }
 
