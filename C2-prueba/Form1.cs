@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Data;
+using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace C2_prueba
 {
@@ -9,6 +11,30 @@ namespace C2_prueba
         public Form1()
         {
             InitializeComponent();
+
+            dgvProductos.BorderStyle = BorderStyle.FixedSingle;
+            dgvProductos.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvProductos.DefaultCellStyle.BackColor = Color.White;
+            dgvProductos.DefaultCellStyle.ForeColor = Color.Black;
+            dgvProductos.DefaultCellStyle.Font = new Font("Arial", 9);
+            dgvProductos.DefaultCellStyle.SelectionBackColor = Color.SteelBlue;
+            dgvProductos.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvProductos.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+
+            dgvProductos.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
+            dgvProductos.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvProductos.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            dgvProductos.EnableHeadersVisualStyles = false;
+
+            dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvProductos.AllowUserToAddRows = false;
+            dgvProductos.MultiSelect = false;
+            dgvProductos.AllowUserToResizeRows = false;
+            //dgvProductos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+           
+            dgvProductos.RowTemplate.Height = 30;
+
+            
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -24,17 +50,27 @@ namespace C2_prueba
         private void sincronizarListado()
         {
             // Este metodo carga todos los productos al lisybox de la ui
-            this.lstProductos.Items.Clear();
+            //this.lstProductos.Items.Clear();
           
-
-
             try
             {
                 _ListaProductos = ProductosController.LeerProductos();
+                DataTable dataTable = new DataTable();
+
+                //Definimos las columnas
+                dataTable.Columns.Add("ID", typeof(int));
+                dataTable.Columns.Add("Nombre", typeof(string));
+                dataTable.Columns.Add("Stock", typeof(int));
+
                 foreach (var producto in _ListaProductos)
                 {
-                    this.lstProductos.Items.Add(producto);
+                    //this.lstProductos.Items.Add(producto);
+                    
+                    dataTable.Rows.Add(producto.ID, producto.Nombre, producto.StockActual);
                 }
+
+                dgvProductos.DataSource = dataTable;
+
             }
             catch (Exception ex)
             {
@@ -74,9 +110,9 @@ namespace C2_prueba
         private void button3_Click(object sender, EventArgs e)
         {
             string idMovimiento = DateTime.Now.ToString().Replace("/", "").Replace(":", "").Replace(" ", "");
-            if (this.lstProductos.SelectedIndex != -1) {
+            if (dgvProductos.SelectedRows.Count > 0) {
                
-                _unProducto = this._ListaProductos[this.lstProductos.SelectedIndex];
+                _unProducto = this._ListaProductos[dgvProductos.CurrentCell.RowIndex];
                 int cantidadIngresada = (int)this.nupCantidadMovimiento.Value;
                 
                 if (this.cbxTipoMovimiento.SelectedIndex == 0) {

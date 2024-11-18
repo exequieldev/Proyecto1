@@ -8,3 +8,4 @@
 1256;computadora;100
 1589;Teclado;3
 2;3;5
+500;Teclado
