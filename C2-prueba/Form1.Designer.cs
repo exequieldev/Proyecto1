@@ -115,7 +115,7 @@
             label5.Name = "label5";
             label5.Size = new Size(98, 15);
             label5.TabIndex = 1;
-            label5.Text = "Tipo Mocimiento";
+            label5.Text = "Tipo Movimiento";
             // 
             // label4
             // 

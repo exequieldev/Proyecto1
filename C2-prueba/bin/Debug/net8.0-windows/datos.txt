@@ -9,3 +9,6 @@
 1589;Teclado;3
 2;3;5
 500;Teclado
+456;teclado
+456;computadora
+156;marcador

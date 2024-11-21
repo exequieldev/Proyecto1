@@ -84,7 +84,12 @@ namespace C2_prueba
             //Guardar el producto
             string idProducto = txtID.Text;
             string nombreProducto = txtNombre.Text;
-            
+
+            if (string.IsNullOrEmpty(idProducto) || string.IsNullOrEmpty(nombreProducto))
+            {
+                MessageBox.Show("Debe ingresar el ID y el Nombre del Producto antes de continuar.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; // Salir del método si hay error
+            }
 
             Producto unProducto = new Producto(idProducto, nombreProducto);
 
@@ -92,8 +97,8 @@ namespace C2_prueba
 
             txtID.Text = "";
             txtNombre.Text = "";
-            
 
+            MessageBox.Show("Se ingreso un nuevo producto", "Confirmación", MessageBoxButtons.OK);
             sincronizarListado();
         }
 
@@ -111,7 +116,21 @@ namespace C2_prueba
         {
             string idMovimiento = DateTime.Now.ToString().Replace("/", "").Replace(":", "").Replace(" ", "");
             if (dgvProductos.SelectedRows.Count > 0) {
-               
+
+                // Validar que se haya ingresado una cantidad válida
+                if (nupCantidadMovimiento.Value <= 0)
+                {
+                    MessageBox.Show("Debe ingresar una cantidad válida mayor a cero.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar que se haya seleccionado un tipo de movimiento
+                if (cbxTipoMovimiento.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Debe seleccionar un tipo de movimiento.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 _unProducto = this._ListaProductos[dgvProductos.CurrentCell.RowIndex];
                 int cantidadIngresada = (int)this.nupCantidadMovimiento.Value;
                 
